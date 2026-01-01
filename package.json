@@ -1,0 +1,13 @@
+{
+  "name": "son-saldiri-botu",
+  "version": "1.0.0",
+  "description": "Discord bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3"
+  }
+}

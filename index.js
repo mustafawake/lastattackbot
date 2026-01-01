@@ -5,35 +5,35 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
+// ✅ Render port fix (web server)
+const app = express();
+app.get("/", (req, res) => res.send("Bot çalışıyor ✅"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("🌐 Web server açık, port:", PORT));
+
+// ✅ Bot hazır logu
 client.once("ready", () => {
-  console.log("🤖 Bot Discord'a bağlandı!");
+  console.log("🤖 Bot Discord'a bağlandı:", client.user.tag);
 });
 
-client.on("messageCreate", (message) => {
-  console.log("Mesaj geldi:", message.content);
-
+// ✅ Ping komutu
+client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
 
   if (message.content === "!ping") {
-    message.reply("pong 🏓");
+    await message.reply("pong 🏓");
   }
 });
 
-// 🔑 TOKEN
-client.login(process.env.TOKEN);
-
-// 🌐 WEB SERVER (Render için)
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.get("/", (req, res) => {
-  res.send("Bot çalışıyor kanka 🚀");
-});
-
-app.listen(PORT, () => {
-  console.log("Web server açık:", PORT);
-});
+// ✅ TOKEN kontrol + giriş
+if (!process.env.TOKEN) {
+  console.log("❌ TOKEN bulunamadı! Render Environment Variables'a TOKEN ekle.");
+} else {
+  client.login(process.env.TOKEN).catch((err) => {
+    console.log("❌ Discord login hatası:", err);
+  });
+}
